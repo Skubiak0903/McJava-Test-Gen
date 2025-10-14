@@ -1,0 +1,54 @@
+minecraft:entity {type: 'players', amount: 'multiple', type: 'entities', amount: 'single'}
+minecraft:resource_key {registry: 'minecraft:advancement', registry: 'minecraft:worldgen/configured_feature', registry: 'minecraft:worldgen/template_pool', registry: 'minecraft:worldgen/structure', registry: 'minecraft:recipe'}
+brigadier:string {type: 'greedy', type: 'word', type: 'phrase'}
+minecraft:resource {registry: 'minecraft:attribute', registry: 'minecraft:damage_type', registry: 'minecraft:mob_effect', registry: 'minecraft:enchantment', registry: 'minecraft:entity_type', registry: 'minecraft:worldgen/biome'}
+brigadier:double {max: 59999968, min: -59999968}
+minecraft:resource_location (bez properties)
+minecraft:game_profile (bez properties)
+minecraft:message (bez properties)
+minecraft:component (bez properties)
+brigadier:integer {min: 1, min: 0, max: 255, max: 1000000, max: 1000, max: 99, max: 20, max: 65535}
+brigadier:bool (bez properties)
+minecraft:item_predicate (bez properties)
+minecraft:block_pos (bez properties)
+minecraft:block_predicate (bez properties)
+minecraft:dimension (bez properties)
+brigadier:float {min: 0, max: 1, max: 2, min: 1, max: 10000}
+minecraft:vec3 (bez properties)
+minecraft:nbt_path (bez properties)
+minecraft:nbt_compound_tag (bez properties)
+minecraft:nbt_tag (bez properties)
+minecraft:function (bez properties)
+minecraft:gamemode (bez properties)
+minecraft:dialog (bez properties)
+minecraft:swizzle (bez properties)
+minecraft:entity_anchor (bez properties)
+minecraft:resource_or_tag {registry: 'minecraft:worldgen/biome', registry: 'minecraft:point_of_interest_type'}
+minecraft:item_slots (bez properties)
+minecraft:loot_predicate (bez properties)
+minecraft:score_holder {amount: 'single', amount: 'multiple'}
+minecraft:objective (bez properties)
+minecraft:int_range (bez properties)
+minecraft:heightmap (bez properties)
+minecraft:rotation (bez properties)
+minecraft:uuid (bez properties)
+minecraft:block_state (bez properties)
+minecraft:column_pos (bez properties)
+minecraft:item_stack (bez properties)
+minecraft:item_slot (bez properties)
+minecraft:loot_modifier (bez properties)
+minecraft:resource_or_tag_key {registry: 'minecraft:worldgen/structure'}
+minecraft:loot_table (bez properties)
+minecraft:particle (bez properties)
+minecraft:template_rotation (bez properties)
+minecraft:template_mirror (bez properties)
+minecraft:time {min: 0, min: 1}
+minecraft:objective_criteria (bez properties)
+minecraft:style (bez properties)
+minecraft:scoreboard_slot (bez properties)
+minecraft:operation (bez properties)
+minecraft:vec2 (bez properties)
+minecraft:team (bez properties)
+minecraft:color (bez properties)
+minecraft:resource_selector {registry: 'minecraft:test_instance'}
+minecraft:hex_color (bez properties)

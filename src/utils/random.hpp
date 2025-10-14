@@ -1,0 +1,13 @@
+int randomInt(int min = -1000, int max = 1000);
+float randomFloat(float min = -1000.0f, float max = 1000.0f);
+double randomDouble(double min = -1000.0, double max = 1000.0);
+std::string randomString(size_t length = 8);
+std::string randomMessage(size_t length = randomInt(2,7));
+std::string randomBlockPos();
+std::string randomChoice(const std::vector<std::string>& choices);
+char randomTimeLetter();
+std::string randomVec3();
+std::string randomRotation();
+std::string randomColumnPos();
+std::string randomVec2();
+std::string randomUUID();
