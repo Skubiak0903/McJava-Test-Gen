@@ -26,7 +26,7 @@
                 "${workspaceFolder}/src/parser/parsers/RegistryArgs.cpp",
 
                 "-o",
-                "${workspaceFolder}/main.exe"
+                "${workspaceFolder}/out/main.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

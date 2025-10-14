@@ -20,10 +20,10 @@ int main(int argc, char* argv[])
 
     // load commands
     CommandRegistry cmdReg;
-    if (!cmdReg.loadFromFile("./mcdoc/commands.json", &err)) { std::cerr << "cmd load error: " << err << "\n"; return 1; }
+    if (!cmdReg.loadFromFile("./../mcdoc/commands.json", &err)) { std::cerr << "cmd load error: " << err << "\n"; return 1; }
 
     // load registries
-    if (!RegistriesRegistry::loadFromFile("./mcdoc/registries.json", &err)) { std::cerr << "registries load error: " << err << "\n"; return 1; }
+    if (!RegistriesRegistry::loadFromFile("./../mcdoc/registries.json", &err)) { std::cerr << "registries load error: " << err << "\n"; return 1; }
 
     //RegistriesRegistry::printAllRegistries("minecraft:activity"); // DEBUG
 

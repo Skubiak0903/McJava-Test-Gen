@@ -1,0 +1,9 @@
+# Pliki kompilacji
+*.exe
+
+# Foldery buildów
+/bin/
+/out/
+
+#
+/src/test.cpp
