@@ -16,7 +16,7 @@ public:
 
     static void registerParser(const std::string& name, ParserFunc func);
     static std::vector<std::string> getArguments(const std::string& parser, const std::optional<json>& properties);
-
+    static std::string stripQuotes(const std::string& s);
 private:
     static std::unordered_map<std::string, ParserFunc>& map();
 };

@@ -1,46 +1,65 @@
-#include <random>
-#include <limits>
+#include "./random.hpp"
+#include "./../RegistriesRegistry.hpp"
 
 // globalny generator losowy
 std::random_device rd;  // źródło losowości
 std::mt19937 gen(rd()); // Mersenne Twister
 
-int randomInt(int min = -1000, int max = 1000) {
+int randomInt(int min, int max) {
     std::uniform_int_distribution<int> dist(min, max);
     return dist(gen);
 }
 
-float randomFloat(float min = -1000.0f, float max = 1000.0f) {
+float randomFloat(float min, float max) {
     std::uniform_real_distribution<float> dist(min, max);
     return dist(gen);
 }
 
-double randomDouble(double min = -1000.0, double max = 1000.0) {
+double randomDouble(double min, double max) {
     std::uniform_real_distribution<double> dist(min, max);
     return dist(gen);
 }
-std::vector<std::string> chars = {
-    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-    "0","1","2","3","4","5","6","7","8","9",
-    //"!","@","#","$","%","^","&","*","(",")","_","-","+","=","~","[","]","{","}","\"","'",":",";","|","\\",",",".","/","<",">","?",
-    "-","+",".","_"
-    //"ą","ć","ę","ł","ń","ó","ś","ż","ź",
-    //"Ą","Ć","Ę","Ł","Ń","Ó","Ś","Ć","Ż","Ź"
-};
 
-std::string randomString(size_t length = 8) {
+bool randomBool() {
+    std::bernoulli_distribution d(0.5);
+    return d(gen);
+}
+
+std::string randomText(const std::vector<char>& letters, size_t length) {
     std::string result;
     result.reserve(length * 4); // max 4 bajty na znak UTF-8
-    std::uniform_int_distribution<size_t> dist(0, chars.size() - 1);
+    std::uniform_int_distribution<size_t> dist(0, letters.size() - 1);
 
     for (size_t i = 0; i < length; ++i) {
-        result += chars[dist(gen)];
+        result += letters[dist(gen)];
     }
     return result;
 }
 
-std::string randomMessage(size_t length = randomInt(2,7)) {
+std::string randomString(size_t length) {
+    std::vector<char> chars = {
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        '0','1','2','3','4','5','6','7','8','9',
+        //"!","@","#","$","%","^","&","*","(",")","_","-","+","=","~","[","]","{","}","\"","'",":",";","|","\\",",",".","/","<",">","?",
+        '-','+','.','_'
+
+    };
+    return randomText(chars);
+}
+
+std::string randomFakePlayer(size_t length) {
+    std::vector<char> chars = {
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        '0','1','2','3','4','5','6','7','8','9',
+        //"!","@","#","$","%","^","&","*","(",")","_","-","+","=","~","[","]","{","}","\"","'",":",";","|","\\",",",".","/","<",">","?",
+        '-','+','.','_','%','#'
+    };
+    return randomText(chars);
+}
+
+std::string randomMessage(size_t length) {
     std::string result;
     result += randomString(randomInt(1,10));
     for (size_t i = length - 1; i > 0; i--) {
@@ -72,15 +91,42 @@ std::string randomBlockPos() {
     return result;
 };
 
-static std::string randomChoice(const std::vector<std::string>& choices) {
+std::string randomChoice(const std::vector<std::string>& choices) {
+    if (choices.empty()) {
+        throw std::runtime_error("randomChoice(): choices vector is empty");
+    }
+    
     static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<size_t> dist(0, choices.size() - 1);
     return choices[dist(rng)];
 }
 
 char randomTimeLetter() {
-    std::string str = randomChoice({"t", "s", "d", " "});
+    std::string str = randomChoice({"t", "s", "d", ""});
     return str[0]; // zwracamy pierwszy znak z wylosowanego stringa
+}
+
+std::string randomColor() {
+    const std::vector<std::string> colors = {
+        "aqua","black","blue","dark_aqua","dark_blue","dark_gray",
+        "dark_green","dark_purple","dark_red","gold","gray",
+        "green","light_purple","red","white","yellow"
+    };
+    std::string str = randomChoice(colors);
+    return str;
+}
+std::string randomHexColor() {
+    int r = randomInt(0, 255);
+    int g = randomInt(0, 255);
+    int b = randomInt(0, 255);
+
+    std::stringstream ss;
+    ss << std::uppercase << std::hex << std::setfill('0')
+       << std::setw(2) << (r & 0xFF)
+       << std::setw(2) << (g & 0xFF)
+       << std::setw(2) << (b & 0xFF);
+
+    return ss.str();
 }
 
 std::string randomVec3() {
@@ -97,23 +143,6 @@ std::string randomVec3() {
     }
     return parts[0] + " " + parts[1] + " " + parts[2];
 }
-
-std::string randomRotation() {
-    // "~ ~", "0.0 90", "~0.1 -90", "~-0.9 1.0"
-    std::string a = (rand() % 2 ? "~" + std::to_string(randomFloat(-1.0, 1.0)) : std::to_string(randomFloat(0, 360)));
-    std::string b = (rand() % 2 ? "~" + std::to_string(randomFloat(-1.0, 1.0)) : std::to_string(randomFloat(-180, 180)));
-    return a + " " + b;
-}
-
-std::string randomColumnPos() {
-    // "~ ~", "0 0", "^ ^"
-    std::string prefix = randomChoice({"", "~", "^"});
-    if (prefix.empty()) {
-    return std::to_string(randomInt(-100, 100)) + " " + std::to_string(randomInt(-100, 100));
-    }
-    return prefix + " " + prefix;
-}
-
 std::string randomVec2() {
     // "0 -90.4", "~0.1 ~", "^0.42 ^", "~90 0"
     std::vector<std::string> parts;
@@ -127,6 +156,21 @@ std::string randomVec2() {
             parts.push_back(prefix + std::to_string(randomFloat(-5.0, 5.0)));
     }
     return parts[0] + " " + parts[1];
+}
+
+std::string randomRotation() {
+    // "~ ~", "0.0 90", "~0.1 -90", "~-0.9 1.0"
+    std::string a = (rand() % 2 ? "~" + std::to_string(randomFloat(-1.0, 1.0)) : std::to_string(randomFloat(0, 360)));
+    std::string b = (rand() % 2 ? "~" + std::to_string(randomFloat(-1.0, 1.0)) : std::to_string(randomFloat(-180, 180)));
+    return a + " " + b;
+}
+std::string randomColumnPos() {
+    // "~ ~", "0 0", "^ ^"
+    std::string prefix = randomChoice({"", "~", "^"});
+    if (prefix.empty()) {
+    return std::to_string(randomInt(-100, 100)) + " " + std::to_string(randomInt(-100, 100));
+    }
+    return prefix + " " + prefix;
 }
 
 std::string randomUUID() {
@@ -143,4 +187,52 @@ std::string randomUUID() {
             uuid += '-';
     }
     return uuid;
+}
+
+std::string randomIntRange(int min, int max) {
+    int type = randomInt(0, 3);
+    int a = randomInt(min, max);
+    int b = randomInt(min, max);
+
+    if (a > b) std::swap(a, b); // żeby zakresy miały sens
+
+    std::stringstream ss;
+    switch (type) {
+        case 0: ss << a; break;            // np. "3"
+        case 1: ss << a << ".."; break;    // np. "3.."
+        case 2: ss << ".." << b; break;    // np. "..3"
+        case 3: ss << a << ".." << b; break; // np. "1..5"
+    }
+    return ss.str();
+}
+
+std::vector<std::string> getRegistries(std::string regName) {
+    const Registry* reg = RegistriesRegistry::getRootNodeFor(regName);
+    if (!reg) {
+        std::cerr << "[ERROR] Registry pointer is null (" << regName << ")!\n";
+        exit(EXIT_FAILURE);
+    }
+    return reg->registries;
+}
+
+std::string randomAdvancement() {
+    std::vector<std::string> regs = getRegistries("minecraft:advancement");
+    return randomChoice(regs);
+}
+
+std::string randomEntityType() {
+    std::vector<std::string> regs = getRegistries("minecraft:entity_type");
+    return randomChoice(regs);
+}
+std::string randomBlockType() {
+    std::vector<std::string> regs = getRegistries("minecraft:block");
+    return randomChoice(regs);
+}
+std::string randomItemType() {
+    std::vector<std::string> regs = getRegistries("minecraft:item");
+    return randomChoice(regs);
+}
+std::string randomStat() {
+    std::vector<std::string> regs = getRegistries("minecraft:custom_stat");
+    return randomChoice(regs);
 }

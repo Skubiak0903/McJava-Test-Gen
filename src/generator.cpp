@@ -83,13 +83,6 @@ private:
                 "RESOURCE_LOCATION"
             };
         };
-
-        // TODO:
-        parserMap["minecraft:game_profile"] = []() {
-            return std::vector<std::string>{
-                "GAME_PROFILE"
-            };
-        };
         
         // TODO:
         parserMap["minecraft:component"] = []() {
@@ -155,27 +148,6 @@ private:
         };
 
         // TODO:
-        parserMap["minecraft:score_holder"] = []() {
-            return std::vector<std::string>{
-                "SCORE_HOLDER"
-            };
-        };
-
-        // FIXME:
-        parserMap["minecraft:objective"] = []() {
-            return std::vector<std::string>{
-                "test", ".secret_score", "420_score"
-            };
-        };
-
-        // FIXME:
-        parserMap["minecraft:int_range"] = []() {
-            return std::vector<std::string>{
-                "1..5", "1", "..4", "9..", "-1..0"
-            };
-        };
-
-        // TODO:
         parserMap["minecraft:block_state"] = []() {
             return std::vector<std::string>{
                 "BLOCK_STATE"
@@ -211,72 +183,9 @@ private:
         };
 
         // TODO:
-        parserMap["minecraft:template_rotation"] = []() {
-            return std::vector<std::string>{
-                "TEMPLATE_ROTATION"
-            };
-        };
-        
-        // TODO:
-        parserMap["minecraft:template_mirror"] = []() {
-            return std::vector<std::string>{
-                "TEMPLATE_MIRROR"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:objective_criteria"] = []() {
-            return std::vector<std::string>{
-                "OBJECTIVE_CRITERIA"
-            };
-        };
-
-        // TODO:
         parserMap["minecraft:style"] = []() {
             return std::vector<std::string>{
                 "STYLE"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:scoreboard_slot"] = []() {
-            return std::vector<std::string>{
-                "SCOREBOARD_SLOT"
-            };
-        };
-        
-        // TODO:
-        parserMap["minecraft:operation"] = []() {
-            return std::vector<std::string>{
-                "OPERATION"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:team"] = []() {
-            return std::vector<std::string>{
-                "TEAM"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:color"] = []() {
-            return std::vector<std::string>{
-                "COLOR"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:resource_selector"] = []() {
-            return std::vector<std::string>{
-                "RESOURCE_SELECTOR"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:hex_color"] = []() {
-            return std::vector<std::string>{
-                "HEX_COLOR"
             };
         };
     }

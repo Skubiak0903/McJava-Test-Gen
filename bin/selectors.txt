@@ -1,0 +1,31 @@
+Selectors
+
+@p	- max 1 player
+@r	- max 1 player
+@a	- all players
+@e	- all entities
+@s	- max 1 entity
+@n	- max 1 entity
+
+Arguments testing for equality cannot be duplicated, while arguments testing for inequality can.
+
+Arguments:
+x,y,z		    - random Double			- [x=RANDOM_DOUBLE,y=RANDOM_DOUBLE,z=RANDOM_DOUBLE]
+distance	    - random Int Range		- [distance=INT_RANGE]
+dx, dy, dz	    - random Double			- [dx=RANDOM_DOUBLE,dy=RANDOM_DOUBLE,dz=RANDOM_DOUBLE]
+x_rotation	    - random Int Range		- [x_rotation=INT_RANGE]
+y_rotation	    - random Int Range		- [y_rotation=INT_RANGE]
+scores		    - Component			    - [scores={<objective>=INT_RANGE,....}]
+tag		        - random String			- [tag=<string>]  - [tag=!<string>] - [tag=] - [tag=!]
+team		    - random String			- [team=<teamname>]  - [team=!<teamname>] - [team=] - [team=!]
+name		    - random String			- [name=<givenName>] - [name=!<givenName>]
+type		    - random entity type    - [type=<entityType>] - [type=!<entityType>]
+predicate	    - random Path	 		- [predicate=<resource location>] - [predicate=!<resource location>]
+nbt		        - random NBT			- [nbt=<compoundTag>] - [nbt=!<compoundTag>]
+level		    - random Int Range		- [level=INT_RANGE]
+gamemode	    - random Gamemode		- [gamemode=<gamemodeName>] - [gamemode=!<gamemodeName>]
+advancements	- random Path			- [advancements={<resource location>=<bool>}] - [advancements={<resource location>={<criteria>=<bool>}}]
+limit		    - random Int			- [limit=<value>]
+sort		    - static strings		- [sort=(nearest|furthest|random|arbitrary)]
+
+predicate can be inline instead of being only in datapack

@@ -2,8 +2,13 @@
 *.exe
 
 # Foldery buildów
-/bin/
+/bin/*
 /out/
+
+# bin allow
+!/bin/all_parsers.txt
+!/bin/selectors.txt
+!/bin/minecraft_commands_parsers.txt
 
 #
 /src/test.cpp

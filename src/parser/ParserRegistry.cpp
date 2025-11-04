@@ -44,3 +44,12 @@ std::vector<std::string> ParserRegistry::getArguments(const std::string& parser,
     std::cerr << "Unknown parser: " << parser << std::endl;
     exit(EXIT_FAILURE);
 }
+
+std::string ParserRegistry::stripQuotes(const std::string& s) {
+    if (s.size() >= 2 && 
+        ((s.front() == '"' && s.back() == '"') || 
+         (s.front() == '\'' && s.back() == '\''))) {
+        return s.substr(1, s.size() - 2);
+    }
+    return s;
+}

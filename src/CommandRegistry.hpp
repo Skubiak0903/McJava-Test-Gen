@@ -27,7 +27,7 @@ public:
     CommandRegistry() = default;
 
     // Load data.json (the commands tree)
-    bool loadFromFile(const std::string& path, std::string *err = nullptr) {
+    bool loadFromFile(const std::string& path, std::string *err = nullptr, const int perm_lvl = -1) {
         std::ifstream f(path);
         if (!f.is_open()) {
             if (err) *err = "Cannot open file: " + path;
@@ -41,7 +41,8 @@ public:
                 for (auto it = children.begin(); it != children.end(); ++it) {
                     // top-level keys are command names: literal nodes
                     std::string cmdName = it.key();
-                    auto node = parseNodeRecursive(it.key(), it.value());
+                    auto node = parseNodeRecursive(it.key(), it.value(), perm_lvl);
+                    if (node == nullptr) continue;
                     roots.emplace(cmdName, std::move(node));
                 }
                 return true;
@@ -77,7 +78,8 @@ private:
     std::unordered_map<std::string, std::unique_ptr<CmdNode>> roots;
 
     // parse one JSON node into CmdNode recursively
-    static std::unique_ptr<CmdNode> parseNodeRecursive(const std::string& key, const json& jnode) {
+    static std::unique_ptr<CmdNode> parseNodeRecursive(const std::string& key, const json& jnode, const int perm_lvl) {
+        if (perm_lvl != -1 && jnode.contains("required_level") && jnode["required_level"].is_number_integer() && !(jnode["required_level"] <= perm_lvl)) return nullptr;
         auto n = std::make_unique<CmdNode>();
         n->key = key;
         if (jnode.contains("type") && jnode["type"].is_string()) n->type = jnode["type"].get<std::string>();
@@ -89,7 +91,7 @@ private:
         }
         if (jnode.contains("children") && jnode["children"].is_object()) {
             for (auto it = jnode["children"].begin(); it != jnode["children"].end(); ++it) {
-                n->children.emplace(it.key(), parseNodeRecursive(it.key(), it.value()));
+                n->children.emplace(it.key(), parseNodeRecursive(it.key(), it.value(), perm_lvl));
             }
         }
         return n;

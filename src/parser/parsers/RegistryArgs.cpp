@@ -3,19 +3,10 @@
 #include "./../../RegistriesRegistry.hpp"
 #include "./../../utils/random.hpp"
 
-// TODO: Cała implementacja Registries z minecraft działa i jest w pełni skończona
+// INFO: Cała implementacja Registries z minecraft działa i jest w pełni skończona
 
 std::vector<std::string> getRegistriesFromOptions(const std::unordered_map<std::string, std::string>& options);
 std::vector<std::string> getRegistryFromName(std::string name);
-
-std::string stripQuotes(const std::string& s) {
-    if (s.size() >= 2 && 
-        ((s.front() == '"' && s.back() == '"') || 
-         (s.front() == '\'' && s.back() == '\''))) {
-        return s.substr(1, s.size() - 2);
-    }
-    return s;
-}
 
 static bool _ = [] {
     ParserRegistry::registerParser("minecraft:resource_key", [](const std::unordered_map<std::string, std::string>& options) {
@@ -59,7 +50,7 @@ std::vector<std::string> getRegistriesFromOptions(const std::unordered_map<std::
 
     //std::cerr << "Registry name raw: '" << it->second << "'" << std::endl;
 
-    return getRegistryFromName(stripQuotes(regOpt.value()));
+    return getRegistryFromName(ParserRegistry::stripQuotes(regOpt.value()));
 }
 
 std::vector<std::string> getRegistryFromName(std::string name) {
