@@ -1,20 +1,20 @@
-// BrigadierArgs.cpp
 #include "./../ParserRegistry.hpp"
 #include "./../../utils/random.hpp"
+#include "./../../utils/SelectorGenerator.hpp"
 
 
-// FIXME: Cała implementacja SCORE z minecraft działa i jest w pełni skończona
+// INFO: Cała implementacja SCORE z minecraft działa i jest w pełni skończona
 
 static bool _ = [] {
     ParserRegistry::registerParser("minecraft:score_holder", [](const std::unordered_map<std::string, std::string>& options) {
         //minecraft:score_holder {amount: 'single', amount: 'multiple'}
         // selector, username, uuid, fake players (%name, #name, .name)
-        return std::vector<std::string>{
-            //randomSelector(),
-            randomString(), // username
-            randomUUID(),
-            randomFakePlayer() // (%name, #name, .name)
-        };
+        /*return std::vector<std::string>{
+            //randomEntitySelector(true), // selector
+            //randomUUID(),
+            //randomFakePlayer() // (%name, #name, .name)
+        };*/
+        return randomEntitySelectors(true);
     });
     ParserRegistry::registerParser("minecraft:objective", [](const std::unordered_map<std::string, std::string>& options) {
         return std::vector<std::string>{

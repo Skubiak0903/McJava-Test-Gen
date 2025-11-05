@@ -12,6 +12,8 @@
 
 void initSelectorGenerator();
 
-std::vector<std::string> randomEntitySelector(const bool multiple);
-std::vector<std::string> randomPlayerSelector(const bool multiple);
+std::string randomEntitySelector(const bool multiple);
+std::string randomPlayerSelector(const bool multiple);
+std::vector<std::string> randomEntitySelectors(const bool multiple);
+std::vector<std::string> randomPlayerSelectors(const bool multiple);
 std::vector<std::string> randomGameProfile();

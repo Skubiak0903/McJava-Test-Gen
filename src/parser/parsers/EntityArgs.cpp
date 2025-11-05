@@ -21,8 +21,7 @@ static bool _ = [] {
         // - []
         // "@s", "@a", "@e[type=zombie]", "@r", "ac1947a9-5e64-4d85-8324-d4294851ac74"
         std::string type = "";
-        bool multiple;
-
+        bool multiple = false;
         auto itType = options.find("type");
         if (itType != options.end()) {
             type = ParserRegistry::stripQuotes(itType->second);
@@ -51,9 +50,9 @@ static bool _ = [] {
         // single = only single
 
         if (type == "players") {
-            return randomPlayerSelector(multiple);
+            return randomPlayerSelectors(multiple);
         } else if (type == "entities") {
-            return randomEntitySelector(multiple);
+            return randomEntitySelectors(multiple);
         } else {
             std::cerr << "Unknown 'type' value in Entity Parser! '" << type << "'" << std::endl;
             exit(EXIT_FAILURE);

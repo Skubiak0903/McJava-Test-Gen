@@ -1,4 +1,3 @@
-// BrigadierArgs.cpp
 #include "./../ParserRegistry.hpp"
 #include "./../../utils/random.hpp"
 

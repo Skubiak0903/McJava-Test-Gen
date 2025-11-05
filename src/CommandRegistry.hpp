@@ -91,9 +91,11 @@ private:
         }
         if (jnode.contains("children") && jnode["children"].is_object()) {
             for (auto it = jnode["children"].begin(); it != jnode["children"].end(); ++it) {
-                n->children.emplace(it.key(), parseNodeRecursive(it.key(), it.value(), perm_lvl));
+                auto child = parseNodeRecursive(it.key(), it.value(), perm_lvl);
+                if (child != nullptr) {
+                    n->children.emplace(it.key(), std::move(child));
+                }
             }
-        }
-        return n;
+        }        return n;
     }
 };

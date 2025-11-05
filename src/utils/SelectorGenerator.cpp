@@ -409,7 +409,7 @@ std::string randomSingleEntitySelector() {
 
 // Return selectors
 
-std::vector<std::string> randomPlayerSelector(const bool multiple) {
+std::vector<std::string> randomPlayerSelectors(const bool multiple) {
     if (!initialized) {
         initSelectorGenerator();
         initialized = true;
@@ -432,6 +432,21 @@ std::vector<std::string> randomPlayerSelector(const bool multiple) {
     }
 }
 
+std::string randomPlayerSelector(const bool multiple) {
+    if (!initialized) {
+        initSelectorGenerator();
+        initialized = true;
+    }
+
+    if (multiple) {
+        // multiple players selector
+        return randomMultiplePlayerSelector();
+    } else {
+        // single player Selector
+        return randomSinglePlayerSelector();
+    }
+}
+
 std::vector<std::string> randomGameProfile()  {
     if (!initialized) {
         initSelectorGenerator();
@@ -445,7 +460,7 @@ std::vector<std::string> randomGameProfile()  {
 
 
 
-std::vector<std::string> randomEntitySelector(const bool multiple) {
+std::vector<std::string> randomEntitySelectors(const bool multiple) {
     if (!initialized) {
         initSelectorGenerator();
         initialized = true;
@@ -465,5 +480,20 @@ std::vector<std::string> randomEntitySelector(const bool multiple) {
             randomUUID(),
             randomFakePlayer()
         };
+    }
+}
+
+std::string randomEntitySelector(const bool multiple) {
+    if (!initialized) {
+        initSelectorGenerator();
+        initialized = true;
+    }
+
+    if (multiple) {
+        // multiple entities selector
+        return randomMultipleEntitySelector();
+    } else {
+        // single player Selector
+        return randomSingleEntitySelector();
     }
 }
