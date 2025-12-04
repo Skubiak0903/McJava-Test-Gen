@@ -51,3 +51,9 @@ std::string randomStat();
 
 std::string randomItemTag();
 std::string randomBlockTag();
+
+std::string randomNbtTag(size_t maxObjects = 5);
+std::string randomNumberValue();
+std::string randomStringValue();
+std::string randomListValue();
+std::string randomTextValue();

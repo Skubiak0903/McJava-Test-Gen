@@ -16,12 +16,29 @@ static bool _ = [] {
     ParserRegistry::registerParser("minecraft:block_predicate", [](const std::unordered_map<std::string, std::string>& options) {
         // - block
         // - block[]
+        // - block{}
+        // - block[]{}
         // - #block
         // - #block[]
+        // - #block{}
+        // - #block[]{}
         std::string block = randomBool() ? randomBlockType() : "#" + randomBlockTag();
         std::string component = randomBool() ? "[]" : ""; // <- dodać komponenty
+        std::string nbttag = randomBool() ? "{}" : ""; // <- dodać nbttagi
         return std::vector<std::string>{
-            block + component
+            block + component + nbttag
+        };
+    });
+
+    ParserRegistry::registerParser("minecraft:block_state", [](const std::unordered_map<std::string, std::string>& options) {
+        // - block
+        // - block[]
+        // - block{}
+        // - block[]{}
+        std::string component = randomBool() ? "[]" : ""; // <- dodać komponenty
+        std::string nbttag = randomBool() ? "{}" : ""; // <- dodać nbttagi
+        return std::vector<std::string>{
+            randomBlockType() + component + nbttag
         };
     });
     return true;

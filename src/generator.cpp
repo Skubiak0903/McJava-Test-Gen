@@ -82,27 +82,6 @@ private:
             return std::vector<std::string>{
                 "COMPONENT"
             };
-        };     
-
-        // TODO:
-        parserMap["minecraft:nbt_path"] = []() {
-            return std::vector<std::string>{
-                "NBT_PATH"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:nbt_compound_tag"] = []() {
-            return std::vector<std::string>{
-                "NBT_COMPOUND_TAG"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:nbt_tag"] = []() {
-            return std::vector<std::string>{
-                "NBT_TAG"
-            };
         };
         
         // TODO:
@@ -116,13 +95,6 @@ private:
         parserMap["minecraft:loot_predicate"] = []() {
             return std::vector<std::string>{
                 "LOOT_PREDICATE"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:block_state"] = []() {
-            return std::vector<std::string>{
-                "BLOCK_STATE"
             };
         };
         

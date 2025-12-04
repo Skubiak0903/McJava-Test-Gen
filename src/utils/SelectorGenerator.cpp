@@ -151,6 +151,9 @@ std::string genType() {
 // PREDICATE
 
 // NBT
+std::string genNbt() {
+    return "nbt=" + randomNbtTag();
+}
 
 std::string genLevel() {
     return "level=" + randomIntRange(0, 100);
@@ -214,6 +217,7 @@ std::string randomMultiplePlayerSelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
+            genNbt,
         };
 
         if (selector != "@s") {
@@ -276,6 +280,7 @@ std::string randomSinglePlayerSelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
+            genNbt,
         };
 
         if (selector != "@s") {
@@ -341,6 +346,7 @@ std::string randomMultipleEntitySelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
+            genNbt,
         };
 
         if (selector != "@s") {
@@ -400,6 +406,7 @@ std::string randomSingleEntitySelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
+            genNbt,
         };
 
         if (selector != "@s") {

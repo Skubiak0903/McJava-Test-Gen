@@ -45,7 +45,7 @@ std::string randomString(size_t length) {
         '-','+','.','_'
 
     };
-    return randomText(chars);
+    return randomText(chars, length);
 }
 
 std::string randomFakePlayer(size_t length) {
@@ -56,7 +56,7 @@ std::string randomFakePlayer(size_t length) {
         //"!","@","#","$","%","^","&","*","(",")","_","-","+","=","~","[","]","{","}","\"","'",":",";","|","\\",",",".","/","<",">","?",
         '-','+','.','_','%','#'
     };
-    return randomText(chars);
+    return randomText(chars, length);
 }
 
 std::string randomResourceString(size_t length) {
@@ -65,7 +65,7 @@ std::string randomResourceString(size_t length) {
         '0','1','2','3','4','5','6','7','8','9',
         '-','/','.','_'
     };
-    return randomText(chars);
+    return randomText(chars, length);
 }
 
 std::string randomPrefixString(size_t length) {
@@ -74,7 +74,7 @@ std::string randomPrefixString(size_t length) {
         '0','1','2','3','4','5','6','7','8','9',
         '-','.','_'
     };
-    return randomText(chars);
+    return randomText(chars, length);
 }
 
 std::string randomMessage(size_t length) {
@@ -119,9 +119,18 @@ std::string randomChoice(const std::vector<std::string>& choices) {
     return choices[dist(rng)];
 }
 
+char randomCharChoice(const std::vector<char>& choices) {
+    if (choices.empty()) {
+        throw std::runtime_error("randomChoice(): choices vector is empty");
+    }
+    
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<size_t> dist(0, choices.size() - 1);
+    return choices[dist(rng)];
+}
+
 char randomTimeLetter() {
-    std::string str = randomChoice({"t", "s", "d"});
-    return str[0]; // zwracamy pierwszy znak z wylosowanego stringa
+    return randomCharChoice({'t', 's', 'd'});
 }
 
 std::string randomColor() {
@@ -291,4 +300,93 @@ std::string randomItemTag() {
 std::string randomBlockTag() {
     std::vector<std::string> regs = getRegistries("minecraft:tag/block");
     return randomChoice(regs);
+}
+
+std::string randomTagIdent() {
+    std::string identText = randomString(randomInt(4,10));
+    std::string quots = randomChoice({"","\'","\""});
+    return quots + identText + quots;
+}
+
+std::string randomNumberValue() {
+    // Number value: 1f, 0d, etc.
+    bool isInt = randomBool();
+    std::string suffix = isInt ?
+        randomChoice({"b", "d", "f", "i", "l", "B", "D", "F", "I", "L", "e+1","e-1","E+10d", "e-5f", ".", "", "s", "S", "us", "ui", "Ul"}) :
+        randomChoice({"d", "f", "D", "F", "e+1","e-1","E+10d", "e-5f", ".", ""});
+    if (isInt) {
+        return std::to_string(randomInt(-1000, 1000)) + suffix;
+    } else {
+        return std::to_string(randomFloat(-1000.0f, 1000.0f)) + suffix;
+    }
+}
+
+std::string randomTextValue() {
+    // Text value without quotes (cannot start with number)
+    std::string identText = randomString(randomInt(4, 10));
+    // Ensure it doesn't start with a number
+    if (std::isdigit(identText[0]) || identText[0] == '.' || identText[0] == '-' || identText[0] == '+') {
+        identText[0] = randomCharChoice({'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'});
+    }
+    return identText;
+}
+
+std::string randomStringValue() {
+    int type = randomInt(0, 1);
+    if (type == 0) {
+        // Text value with quotes
+        std::string identText = randomString(randomInt(4, 10));
+        std::string quots = randomChoice({"\"", "'"});
+        return quots + identText + quots;
+    } else {
+        return randomTextValue();
+    }
+}
+
+std::string randomTagValue() {
+    int type = randomInt(0, 1);
+    
+    if (type == 0) {
+        return randomNumberValue();
+    } else {
+        return randomStringValue();
+    }
+}
+
+std::string randomNbtTag(size_t maxObjects) {
+    if (maxObjects < 1) return randomTagValue();
+    int argsCount = randomInt(0,maxObjects);
+    std::stringstream tag;
+    tag << "{" ;
+    for (int i = 0; i < argsCount; i++) {
+        std::string ident = randomTagIdent();
+        std::string element;
+        int idx = randomInt(0,2);
+        if (idx == 0) {
+            // {}
+            element = randomNbtTag(maxObjects - 1);
+        } else if (idx == 1) {
+            // []
+            element = randomListValue();
+        } else {
+            // text
+            element = randomTagValue();
+        }
+        tag << ident << ":" << element;
+        if (i != argsCount - 1 || (i != argsCount - 1 && randomBool())) tag << ",";
+    }
+    tag << "}"; 
+    return tag.str();
+}
+
+std::string randomListValue() {
+    std::stringstream list;
+    int listLength = randomInt(0,5); 
+    list << "[";
+    for (int i = 0; i < listLength; i++) {
+        list << randomTagValue();
+        if (i != listLength - 1 || (i != listLength - 1 && randomBool())) list << ",";
+    }
+    list << "]";
+    return list.str();
 }
