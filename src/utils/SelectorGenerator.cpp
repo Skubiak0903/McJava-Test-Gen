@@ -88,18 +88,18 @@ std::string genDZ() {
 
 std::string genDistance() {
     std::ostringstream oss;
-    oss << "distance=" << randomIntRange(0, 100);
+    oss << "distance=" << randomFloatRange(0.0f, 100.0f);
     return oss.str();
 }
 
 std::string genXRotation() {
     std::ostringstream oss;
-    oss << "x_rotation=" << randomIntRange(-180, 180);
+    oss << "x_rotation=" << randomFloatRange(-180.0f, 180.0f);
     return oss.str();
 }
 std::string genYRotation() {
     std::ostringstream oss;
-    oss << "y_rotation=" << randomIntRange(-90, 90);
+    oss << "y_rotation=" << randomFloatRange(-90.0f, 90.0f);
     return oss.str();
 }
 
@@ -170,9 +170,9 @@ std::string genAdvancement() {
     if (!negateAdvancement.has_value()) return "";
     std::ostringstream oss;
     if (randomBool())
-        oss << "advancements=" << (negateAdvancement.value() ? "!" : "") << randomChoice(advancements) << "=" << randomBool();
+        oss << "advancements={" << randomChoice(advancements) << "=" << (randomBool() ? "true" : "false") << "}";
     else
-        oss << "advancements=" << (negateAdvancement.value() ? "!" : "") << randomChoice(advancements) << "={" << randomString(6) << "=" << randomBool() << "}";
+        oss << "advancements={" << randomChoice(advancements) << "={" << randomString(6) << "=" << (randomBool() ? "true" : "false") << "}}";
     if (negateAdvancement.value() == false) negateAdvancement = {};
     return oss.str();
 }
@@ -193,7 +193,7 @@ std::string genSort() {
 std::string randomMultiplePlayerSelector() {
     std::ostringstream oss;
 
-    selectors = {"@p", "@r", "@a", "@e[type=player,", "@s ", "@n[type=player,"};
+    selectors = {"@p", "@r", "@a", "@e[type=player,", "@s", "@n[type=player,"};
     negateTag = randomBool();
     negateTeam = randomBool();
     negateName = randomBool();
@@ -214,14 +214,19 @@ std::string randomMultiplePlayerSelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
-            genLimit, genSort
         };
+
+        if (selector != "@s") {
+            generators.push_back(genLimit);
+            generators.push_back(genSort);
+        }
 
         //shuffleVector(generators);
         if (!(selector.starts_with("@e") || selector.starts_with("@n"))) oss << "[";
         bool first = true;
 
         for (int i = 0; i < argCount; ++i) {
+            if (generators.empty()) break; // stop if no generators left
             int j = randomInt(0, generators.size() - 1);
             std::string arg = generators[j](); // wygeneruj argument
 
@@ -230,6 +235,8 @@ std::string randomMultiplePlayerSelector() {
             if (!first) oss << ",";
             oss << arg;
             first = false;
+
+            generators.erase(generators.begin() + j); // remove used generator
         }
 
         oss << "]";
@@ -237,8 +244,8 @@ std::string randomMultiplePlayerSelector() {
         // if there is no arguments but selector is ending with [type=player,
         if (selector.starts_with("@e") || selector.starts_with("@n")) {
             std::string result = oss.str();
-            result.pop_back();  // remove the comma
-            oss << "]";         // close the bracket
+            result.pop_back();      // remove the comma
+            result = result + "]";  // close the bracket
             return result;
         }
     }
@@ -248,7 +255,7 @@ std::string randomMultiplePlayerSelector() {
 std::string randomSinglePlayerSelector() {
     std::ostringstream oss;
 
-    selectors = {"@p", "@r", "@a[limit=1,", "@e[type=player,limit=1,", "@s ", "@n[type=player,"};
+    selectors = {"@p", "@r", "@a[limit=1,", "@e[type=player,limit=1,", "@s", "@n[type=player,"};
     negateTag = randomBool();
     negateTeam = randomBool();
     negateName = randomBool();
@@ -269,14 +276,18 @@ std::string randomSinglePlayerSelector() {
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
             genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
-            genSort
         };
+
+        if (selector != "@s") {
+            generators.push_back(genSort);
+        }
 
         //shuffleVector(generators);
         if (!(selector.starts_with("@e") || selector.starts_with("@n") || selector.starts_with("@a"))) oss << "[";
         bool first = true;
 
         for (int i = 0; i < argCount; ++i) {
+            if (generators.empty()) break; // stop if no generators left
             int j = randomInt(0, generators.size() - 1);
             std::string arg = generators[j](); // wygeneruj argument
 
@@ -285,6 +296,8 @@ std::string randomSinglePlayerSelector() {
             if (!first) oss << ",";
             oss << arg;
             first = false;
+
+            generators.erase(generators.begin() + j); // remove used generator
         }
 
         oss << "]";
@@ -292,8 +305,8 @@ std::string randomSinglePlayerSelector() {
         // if there is no arguments but selector is ending with [type=player,
         if (selector.starts_with("@e") || selector.starts_with("@n") || selector.starts_with("@a")) {
             std::string result = oss.str();
-            result.pop_back();  // remove the comma
-            oss << "]";         // close the bracket
+            result.pop_back();      // remove the comma
+            result = result + "]";  // close the bracket
             return result;
         }
     }
@@ -306,7 +319,7 @@ std::string randomSinglePlayerSelector() {
 std::string randomMultipleEntitySelector() {
     std::ostringstream oss;
 
-    selectors = {"@p", "@r", "@a", "@e", "@s ", "@n"};
+    selectors = {"@p", "@r", "@a", "@e", "@s", "@n"};
     negateTag = randomBool();
     negateTeam = randomBool();
     negateType = randomBool();
@@ -327,15 +340,24 @@ std::string randomMultipleEntitySelector() {
         using ArgGen = std::string(*)();
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
-            genScores, genTag, genTeam, genType, genName, genLevel, genGamemode, genAdvancement,
-            genLimit, genSort
+            genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
         };
+
+        if (selector != "@s") {
+            generators.push_back(genLimit);
+            generators.push_back(genSort);
+        }
+
+        if (selector == "@e" || selector == "@n" || selector == "@s") {
+            generators.push_back(genType);
+        }
 
         //shuffleVector(generators);
         oss << "[";
         bool first = true;
 
         for (int i = 0; i < argCount; ++i) {
+            if (generators.empty()) break; // stop if no generators left
             int j = randomInt(0, generators.size() - 1);
             std::string arg = generators[j](); // wygeneruj argument
 
@@ -344,6 +366,8 @@ std::string randomMultipleEntitySelector() {
             if (!first) oss << ",";
             oss << arg;
             first = false;
+
+            generators.erase(generators.begin() + j); // remove used generator
         }
 
         oss << "]";
@@ -354,7 +378,7 @@ std::string randomMultipleEntitySelector() {
 std::string randomSingleEntitySelector() {
     std::ostringstream oss;
 
-    selectors = {"@p", "@r", "@a[limit=1,", "@e[limit=1,", "@s ", "@n"};
+    selectors = {"@p", "@r", "@a[limit=1,", "@e[limit=1,", "@s", "@n"};
     negateTag = randomBool();
     negateTeam = randomBool();
     negateType = randomBool();
@@ -375,15 +399,23 @@ std::string randomSingleEntitySelector() {
         using ArgGen = std::string(*)();
         std::vector<ArgGen> generators = {
             genXYZ, genDistance, genDX, genDY, genDZ, genXRotation, genYRotation,
-            genScores, genTag, genType, genTeam, genName, genLevel, genGamemode, genAdvancement,
-            genSort
+            genScores, genTag, genTeam, genName, genLevel, genGamemode, genAdvancement,
         };
+
+        if (selector != "@s") {
+            generators.push_back(genSort);
+        }
+
+        if (selector.starts_with("@e") || selector == "@n" || selector == "@s") {
+            generators.push_back(genType);
+        }
 
         //shuffleVector(generators);
         if (!(selector.starts_with("@e") || selector.starts_with("@a"))) oss << "[";
         bool first = true;
 
         for (int i = 0; i < argCount; ++i) {
+            if (generators.empty()) break; // stop if no generators left
             int j = randomInt(0, generators.size() - 1);
             std::string arg = generators[j](); // wygeneruj argument
 
@@ -392,6 +424,8 @@ std::string randomSingleEntitySelector() {
             if (!first) oss << ",";
             oss << arg;
             first = false;
+
+            generators.erase(generators.begin() + j); // remove used generator
         }
 
         oss << "]";
@@ -399,8 +433,8 @@ std::string randomSingleEntitySelector() {
         // if there is no arguments but selector is ending with [type=player,
         if (selector.starts_with("@e") || selector.starts_with("@a")) {
             std::string result = oss.str();
-            result.pop_back();  // remove the comma
-            oss << "]";         // close the bracket
+            result.pop_back();      // remove the comma
+            result = result + "]";  // close the bracket
             return result;
         }
     }
@@ -419,15 +453,15 @@ std::vector<std::string> randomPlayerSelectors(const bool multiple) {
         // multiple players selector
         return std::vector<std::string>{
             randomMultiplePlayerSelector(),
-            randomUUID(),
-            randomFakePlayer()
+            //randomUUID(),
+            //randomFakePlayer()
         };
     } else {
         // single player Selector
         return std::vector<std::string>{
             randomSinglePlayerSelector(),
-            randomUUID(),
-            randomFakePlayer()
+            //randomUUID(),
+            //randomFakePlayer()
         };
     }
 }
@@ -454,7 +488,7 @@ std::vector<std::string> randomGameProfile()  {
     }
     return std::vector<std::string>{
         randomMultiplePlayerSelector(),
-        randomFakePlayer()
+        //randomFakePlayer()
     };
 }
 
@@ -471,14 +505,14 @@ std::vector<std::string> randomEntitySelectors(const bool multiple) {
         return std::vector<std::string>{
             randomMultipleEntitySelector(),
             randomUUID(),
-            randomFakePlayer()
+            //randomFakePlayer()
         };
     } else {
         // single player Selector
         return std::vector<std::string>{
             randomSingleEntitySelector(),
             randomUUID(),
-            randomFakePlayer()
+            //randomFakePlayer()
         };
     }
 }

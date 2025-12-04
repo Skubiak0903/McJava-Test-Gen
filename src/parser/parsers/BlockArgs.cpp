@@ -14,13 +14,14 @@ static bool _ = [] {
     });
 
     ParserRegistry::registerParser("minecraft:block_predicate", [](const std::unordered_map<std::string, std::string>& options) {
-        // block predicate:
-        // - #block
         // - block
-        // - #block[]
         // - block[]
+        // - #block
+        // - #block[]
+        std::string block = randomBool() ? randomBlockType() : "#" + randomBlockTag();
+        std::string component = randomBool() ? "[]" : ""; // <- dodać komponenty
         return std::vector<std::string>{
-            "BLOCK_PREDICATE"
+            block + component
         };
     });
     return true;

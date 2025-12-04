@@ -26,6 +26,8 @@
                 "${workspaceFolder}/src/parser/parsers/RegistryArgs.cpp",
                 "${workspaceFolder}/src/parser/parsers/ScoreArgs.cpp",
                 "${workspaceFolder}/src/parser/parsers/TeamArgs.cpp",
+                "${workspaceFolder}/src/parser/parsers/ResourceArgs.cpp",
+                "${workspaceFolder}/src/parser/parsers/ItemArgs.cpp",
                 "${workspaceFolder}/src/utils/SelectorGenerator.cpp",
 
                 "-o",

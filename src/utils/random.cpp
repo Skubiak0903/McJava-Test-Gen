@@ -59,6 +59,24 @@ std::string randomFakePlayer(size_t length) {
     return randomText(chars);
 }
 
+std::string randomResourceString(size_t length) {
+    std::vector<char> chars = {
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        '0','1','2','3','4','5','6','7','8','9',
+        '-','/','.','_'
+    };
+    return randomText(chars);
+}
+
+std::string randomPrefixString(size_t length) {
+    std::vector<char> chars = {
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        '0','1','2','3','4','5','6','7','8','9',
+        '-','.','_'
+    };
+    return randomText(chars);
+}
+
 std::string randomMessage(size_t length) {
     std::string result;
     result += randomString(randomInt(1,10));
@@ -102,7 +120,7 @@ std::string randomChoice(const std::vector<std::string>& choices) {
 }
 
 char randomTimeLetter() {
-    std::string str = randomChoice({"t", "s", "d", ""});
+    std::string str = randomChoice({"t", "s", "d"});
     return str[0]; // zwracamy pierwszy znak z wylosowanego stringa
 }
 
@@ -132,8 +150,10 @@ std::string randomHexColor() {
 std::string randomVec3() {
     // "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~"
     std::vector<std::string> parts;
+    // ~ and ^ cannot mix  -> 1 - normal, 0 -> ^
+    std::vector<std::string> choice = randomBool() ? std::vector<std::string>{"", "~"} : std::vector<std::string>{"^"};
     for (int i = 0; i < 3; ++i) {
-        std::string prefix = randomChoice({"", "~", "^"});
+        std::string prefix = randomChoice(choice);
         if (prefix.empty())
             parts.push_back(std::to_string(randomFloat(-100.0, 100.0)));
         else if (rand() % 2)
@@ -147,7 +167,7 @@ std::string randomVec2() {
     // "0 -90.4", "~0.1 ~", "^0.42 ^", "~90 0"
     std::vector<std::string> parts;
     for (int i = 0; i < 2; ++i) {
-        std::string prefix = randomChoice({"", "~", "^"});
+        std::string prefix = randomChoice({"", "~"});
         if (prefix.empty())
             parts.push_back(std::to_string(randomFloat(-90.0, 90.0)));
         else if (rand() % 2)
@@ -168,7 +188,7 @@ std::string randomColumnPos() {
     // "~ ~", "0 0", "^ ^"
     std::string prefix = randomChoice({"", "~", "^"});
     if (prefix.empty()) {
-    return std::to_string(randomInt(-100, 100)) + " " + std::to_string(randomInt(-100, 100));
+        return std::to_string(randomInt(-100, 100)) + " " + std::to_string(randomInt(-100, 100));
     }
     return prefix + " " + prefix;
 }
@@ -206,6 +226,24 @@ std::string randomIntRange(int min, int max) {
     return ss.str();
 }
 
+std::string randomFloatRange(float min, float max) {
+    int type = randomInt(0, 3);
+    float a = randomFloat(min, max);
+    float b = randomFloat(min, max);
+
+    if (a > b) std::swap(a, b); // żeby zakresy miały sens
+
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(2);  // Parametryzowana precyzja
+    switch (type) {
+        case 0: ss << a; break;            // np. "3.3"
+        case 1: ss << a << ".."; break;    // np. "3.3.."
+        case 2: ss << ".." << b; break;    // np. "..3.3"
+        case 3: ss << a << ".." << b; break; // np. "1.3..5.3"
+    }
+    return ss.str();
+}
+
 std::vector<std::string> getRegistries(std::string regName) {
     const Registry* reg = RegistriesRegistry::getRootNodeFor(regName);
     if (!reg) {
@@ -232,7 +270,25 @@ std::string randomItemType() {
     std::vector<std::string> regs = getRegistries("minecraft:item");
     return randomChoice(regs);
 }
+std::string randomParticleType() {
+    std::vector<std::string> regs = getRegistries("minecraft:particle_type");
+    return randomChoice(regs);
+}
+std::string randomDataComponentType() {
+    std::vector<std::string> regs = getRegistries("minecraft:data_component_type");
+    return randomChoice(regs);
+}
 std::string randomStat() {
     std::vector<std::string> regs = getRegistries("minecraft:custom_stat");
+    return randomChoice(regs);
+}
+
+
+std::string randomItemTag() {
+    std::vector<std::string> regs = getRegistries("minecraft:tag/item");
+    return randomChoice(regs);
+}
+std::string randomBlockTag() {
+    std::vector<std::string> regs = getRegistries("minecraft:tag/block");
     return randomChoice(regs);
 }

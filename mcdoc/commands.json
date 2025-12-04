@@ -11773,62 +11773,6 @@
         "experience"
       ],
       "required_level": 2
-    },
-
-
-    "testing": {
-      "type": "literal",
-      "children": {
-        "first": {
-          "type": "literal",
-          "children": {
-            "first": {
-              "type": "literal",
-              "children": {
-                "first": {
-                  "type": "literal",
-                  "executable": false
-                },
-                "second": {
-                  "type": "literal",
-                  "executable": true
-                },
-                "third": {
-                  "type": "literal",
-                  "executable": true
-                }
-              },
-              "executable": true
-            },
-            "second": {
-              "type": "literal",
-              "children": {
-                "first": {
-                  "type": "literal",
-                  "executable": true
-                },
-                "second": {
-                  "type": "literal",
-                  "children": {
-                    "first": {
-                      "type": "literal",
-                      "executable": true
-                    }
-                  },
-                  "executable": false
-                },
-                "third": {
-                  "type": "literal",
-                  "executable": true
-                }
-              },
-              "executable": false
-            }
-          },
-          "executable": true
-        }
-      },
-      "required_level": 2
     }
   }
 }

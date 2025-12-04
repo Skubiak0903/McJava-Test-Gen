@@ -78,25 +78,11 @@ private:
     // Rejestracja dostępnych parserów
     void registerParsers() {
         // TODO:
-        parserMap["minecraft:resource_location"] = []() {
-            return std::vector<std::string>{
-                "RESOURCE_LOCATION"
-            };
-        };
-        
-        // TODO:
         parserMap["minecraft:component"] = []() {
             return std::vector<std::string>{
                 "COMPONENT"
             };
-        };
-
-        // TODO:
-        parserMap["minecraft:item_predicate"] = []() {
-            return std::vector<std::string>{
-                "ITEM_PREDICATE"
-            };
-        };        
+        };     
 
         // TODO:
         parserMap["minecraft:nbt_path"] = []() {
@@ -118,25 +104,11 @@ private:
                 "NBT_TAG"
             };
         };
-
-        // TODO:
-        parserMap["minecraft:function"] = []() {
-            return std::vector<std::string>{
-                "FUNCTION"
-            };
-        };
         
         // TODO:
         parserMap["minecraft:dialog"] = []() {
             return std::vector<std::string>{
                 "DIALOG"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:item_slots"] = []() {
-            return std::vector<std::string>{
-                "ITEM_SLOTS"
             };
         };
 
@@ -153,32 +125,11 @@ private:
                 "BLOCK_STATE"
             };
         };
-
-        // TODO:
-        parserMap["minecraft:item_stack"] = []() {
-            return std::vector<std::string>{
-                "ITEM_STACK"
-            };
-        };
-        
-        // TODO:
-        parserMap["minecraft:item_slot"] = []() {
-            return std::vector<std::string>{
-                "ITEM_SLOT"
-            };
-        };
         
         // TODO:
         parserMap["minecraft:loot_modifier"] = []() {
             return std::vector<std::string>{
                 "LOOT_MODIFIER"
-            };
-        };
-
-        // TODO:
-        parserMap["minecraft:particle"] = []() {
-            return std::vector<std::string>{
-                "PARTICLE"
             };
         };
 

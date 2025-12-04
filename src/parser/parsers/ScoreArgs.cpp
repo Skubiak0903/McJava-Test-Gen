@@ -14,7 +14,29 @@ static bool _ = [] {
             //randomUUID(),
             //randomFakePlayer() // (%name, #name, .name)
         };*/
-        return randomEntitySelectors(true);
+
+        //{amount: 'single', amount: 'multiple'}
+
+        bool multiple = false;
+        auto itAmount = options.find("amount");
+        if (itAmount != options.end()) {
+            std::string amount = ParserRegistry::stripQuotes(itAmount->second);
+            if(amount == "single") {
+                multiple = false;
+            } else if(amount == "multiple") {
+                multiple = true;
+            } else {
+                std::cerr << "Unknown 'amount' value in ScoreHolder Parser! '" << amount << "'" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            std::cerr << "ScoreHolder parser requires 'amount' option!" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        std::vector<std::string> score_holders = randomEntitySelectors(multiple);
+        score_holders.push_back(randomFakePlayer());
+        return score_holders;
     });
     ParserRegistry::registerParser("minecraft:objective", [](const std::unordered_map<std::string, std::string>& options) {
         return std::vector<std::string>{

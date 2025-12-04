@@ -21,15 +21,15 @@ static bool _ = [] {
         if (min.has_value()) {
             int min_val = min.value();
             return std::vector<std::string>{
-                std::to_string(randomDouble(min_val)) + randomTimeLetter(),
-                std::to_string(randomDouble(min_val)) + randomTimeLetter(),
-                std::to_string(randomDouble(min_val)) + randomTimeLetter()
+                std::to_string(randomDouble(min_val)) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string()),
+                std::to_string(randomDouble(min_val)) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string()),
+                std::to_string(randomDouble(min_val)) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string())
             };
         } else {
             return std::vector<std::string>{
-                std::to_string(randomDouble()) + randomTimeLetter(),
-                std::to_string(randomDouble()) + randomTimeLetter(),
-                std::to_string(randomDouble()) + randomTimeLetter()
+                std::to_string(randomDouble()) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string()),
+                std::to_string(randomDouble()) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string()),
+                std::to_string(randomDouble()) + (randomBool() ? std::string(1, randomTimeLetter()) : std::string())
             };
         }
     });
